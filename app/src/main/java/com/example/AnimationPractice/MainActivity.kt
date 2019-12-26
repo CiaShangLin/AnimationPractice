@@ -17,6 +17,11 @@ class MainActivity : AppCompatActivity() {
 //        }
 //    }
 
+    fun View.dip2px(dpValue: Int): Int {
+        var scale = context.resources.displayMetrics.density
+        return (dpValue * scale + 0.5f).toInt()
+    }
+
     //https://github.com/yangchong211/YCBlogs/blob/master/android/%E5%8A%A8%E7%94%BB%E6%9C%BA%E5%88%B6/01.%E5%8A%A8%E7%94%BB%E6%9C%BA%E5%88%B6%E6%80%BB%E7%BB%93.md
     //https://wiki.jikexueyuan.com/project/android-animation/1.html
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,15 +29,72 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         button2.setOnClickListener {
-            valueAnimatorXML()
+            CDNLAYOUT2.visibility=View.GONE
         }
 
         button3.setOnClickListener {
-            button2.visibility = View.VISIBLE
-            translateCode()
+            CDNLAYOUT2.visibility=View.VISIBLE
+//            button2.visibility = View.VISIBLE
+//            translateCode()
         }
+    }
+
+    @SuppressLint("WrongConstant")
+    fun 拉伸Layoyt(nowHeight: Int, newHeight: Int) {
+        var valueAnimator = ValueAnimator.ofInt(nowHeight, newHeight)
+        valueAnimator.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationEnd(animation: Animator?) {
+
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+
+            }
+
+            override fun onAnimationStart(animation: Animator?) {
+                textView2.visibility = View.VISIBLE
+                textView3.visibility = View.VISIBLE
+                textView4.visibility = View.VISIBLE
+            }
+
+            override fun onAnimationRepeat(animation: Animator?) {
+
+            }
+        })
+        valueAnimator.addUpdateListener {
+            var parma = con.layoutParams
+            parma.height = it.animatedValue as Int
+            con.layoutParams = parma
+        }
+        valueAnimator.duration = 1000
+        valueAnimator.repeatMode = Animation.RESTART
+        valueAnimator.start()
+    }
 
 
+    fun Layout彈跳() {
+        var translateAnimation = TranslateAnimation(
+            0f,    //属性为动画起始时 X坐标上的位置
+            0f,      //属性为动画结束时 X坐标上的位置
+            -400f,  //属性为动画起始时 Y坐标上的位置
+            0f       //属性为动画结束时 Y坐标上的位置
+        )
+        translateAnimation.duration = 1000
+        translateAnimation.interpolator = BounceInterpolator()
+        translateAnimation.repeatCount = Animation.INFINITE
+        translateAnimation.repeatMode = Animation.REVERSE
+        CDN.startAnimation(translateAnimation)
+    }
+
+    fun 客製化TypeEvaluator() {
+        var valueAnimator = ValueAnimator.ofObject(CharEvaluator(), 'A', 'Z')
+        valueAnimator.addUpdateListener {
+            tv.text = it.animatedValue.toString()
+        }
+        valueAnimator.setTarget(tv)
+        valueAnimator.duration = 3000
+        valueAnimator.interpolator = AccelerateInterpolator()
+        valueAnimator.start()
     }
 
     /*
@@ -79,6 +141,9 @@ class MainActivity : AppCompatActivity() {
             Animation.RELATIVE_TO_SELF,  //属性为动画相对于物件的Y坐标的开始位置
             0.5f
         )
+        //pivotX=50 自己的左上角的X+50
+        //pivotX=50% 自己的左上角的X+50%的寬度
+        //pivotX=50%p p=取值的基數是父原件
         scaleAlphaAnimation.duration = 5000
         scaleAlphaAnimation.fillAfter = true
         button2.startAnimation(scaleAlphaAnimation)
@@ -184,15 +249,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("ResourceType")
-    fun valueAnimatorXML(){
+    fun valueAnimatorXML() {
         //animator要放在animator的資料夾才有用
         //不能用<set>包住 應該會被認為是補間動畫
         //animator==valueAnimator在XML裡面
-        var valueAnimator=AnimatorInflater.loadAnimator(this,R.animator.value_animator) as ValueAnimator
+        var valueAnimator =
+            AnimatorInflater.loadAnimator(this, R.animator.value_animator) as ValueAnimator
         valueAnimator.setTarget(button2)
         valueAnimator.start()
 
-        valueAnimator.addListener(object : Animator.AnimatorListener{
+        valueAnimator.addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
 
             }
@@ -243,12 +309,13 @@ class MainActivity : AppCompatActivity() {
 
 
     @SuppressLint("ResourceType")
-    fun objectAnimatorXML(){
-        var objectAnimator=AnimatorInflater.loadAnimator(this,R.animator.object_animator) as ObjectAnimator
-        objectAnimator.setTarget(button2)
+    fun objectAnimatorXML() {
+        var objectAnimator =
+            AnimatorInflater.loadAnimator(this, R.animator.object_animator) as ObjectAnimator
+        objectAnimator.target = button2
         objectAnimator.start()
 
-        objectAnimator.addListener(object : Animator.AnimatorListener{
+        objectAnimator.addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
 
             }
@@ -272,6 +339,36 @@ class MainActivity : AppCompatActivity() {
             button2.layoutParams = parma
             button2.text = it.animatedValue.toString()
         }
+    }
+
+    fun objectAnimatorCode() {
+        //propertyName是控件上的屬性
+        var objectAnimator = ObjectAnimator.ofFloat(tv, "textSize", 14f, 32f, 14f)
+        objectAnimator.duration = 3000
+        objectAnimator.start()
+    }
+
+    fun PropertyValuesHolder() {
+        var rotateProper = PropertyValuesHolder.ofFloat(
+            "Rotation",
+            60f, -60f,
+            40f, -40f,
+            20f, -20f,
+            10f, -10f,
+            0f, 0f
+        )
+        var colorProper = PropertyValuesHolder.ofInt(
+            "BackgroundColor",
+            0xffffffff.toInt(),
+            0xffff00ff.toInt(),
+            0xffffff00.toInt(),
+            0xffffffff.toInt()
+        )
+        var objectAnimator=ObjectAnimator.ofPropertyValuesHolder(tv,rotateProper,colorProper)
+        objectAnimator.duration=3000
+        objectAnimator.start()
+
+
     }
 
 }
