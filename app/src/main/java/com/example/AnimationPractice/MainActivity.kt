@@ -11,12 +11,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    //    companion object{
-//        init {
-//            System.loadLibrary("native-lib")
-//        }
-//    }
-
     fun View.dip2px(dpValue: Int): Int {
         var scale = context.resources.displayMetrics.density
         return (dpValue * scale + 0.5f).toInt()
@@ -27,6 +21,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+        //TEST
 
         button2.setOnClickListener {
             CDNLAYOUT2.visibility=View.GONE
@@ -367,8 +364,16 @@ class MainActivity : AppCompatActivity() {
         var objectAnimator=ObjectAnimator.ofPropertyValuesHolder(tv,rotateProper,colorProper)
         objectAnimator.duration=3000
         objectAnimator.start()
+    }
 
+    fun setLayoutTranslate(){
+        var layoutTransition=LayoutTransition()
+        var objectAnimator=ObjectAnimator.ofFloat(CDNLAYOUT2,"translationX",100f,0f,100f)
+        objectAnimator.duration=3000
+        layoutTransition.setAnimator(LayoutTransition.APPEARING,objectAnimator)
+        MainLayout.layoutTransition=layoutTransition
 
+        //不知道怎麼取得副組建的位置
     }
 
 }
