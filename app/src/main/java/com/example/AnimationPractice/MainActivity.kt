@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         //TEST
         //TEST1
+        //TEST2
 
         button2.setOnClickListener {
             CDNLAYOUT2.visibility=View.GONE
