@@ -123,4 +123,24 @@
         app:layout_constraintEnd_toStartOf="@+id/button3"
         app:layout_constraintStart_toEndOf="@+id/button2"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/round"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        app:layout_constraintBottom_toBottomOf="@+id/pika"
+        app:layout_constraintEnd_toEndOf="@+id/pika"
+        app:layout_constraintStart_toStartOf="@+id/pika"
+        app:layout_constraintTop_toTopOf="@+id/pika"
+        app:srcCompat="@drawable/round" />
+
+    <ImageView
+        android:id="@+id/pika"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/CDNLAYOUT2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/con"
+        app:srcCompat="@drawable/pokeball" />
 </androidx.constraintlayout.widget.ConstraintLayout>

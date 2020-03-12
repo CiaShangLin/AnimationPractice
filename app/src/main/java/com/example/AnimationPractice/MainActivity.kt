@@ -2,8 +2,10 @@ package com.example.AnimationPractice
 
 import android.animation.*
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -22,11 +24,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        //TEST
+        startActivity(Intent(this,RecyclerviewAnimationActivity::class.java))
 
         button2.setOnClickListener {
-            CDNLAYOUT2.visibility=View.GONE
+            var ani = AnimationUtils.loadAnimation(this,R.anim.round)
+            round.startAnimation(ani)
+
         }
 
         button3.setOnClickListener {
@@ -374,6 +377,42 @@ class MainActivity : AppCompatActivity() {
         MainLayout.layoutTransition=layoutTransition
 
         //不知道怎麼取得副組建的位置
+    }
+
+
+    fun 中心點翻轉加上透明換圖(){
+        var MyYAnimation = MyYAnimation().apply {
+            this.duration= 2500
+            this.fillAfter=true
+            this.repeatCount=1
+            this.repeatMode=Animation.REVERSE
+            this.interpolator=AccelerateInterpolator()
+        }
+        var alphaAnimation = AlphaAnimation(1f, 0.1f)
+        alphaAnimation.duration = 2500
+        alphaAnimation.repeatMode=Animation.REVERSE
+        alphaAnimation.repeatCount=1
+        alphaAnimation.fillAfter = true //結束後保留狀態
+        alphaAnimation.setAnimationListener(object :Animation.AnimationListener{
+            override fun onAnimationRepeat(animation: Animation?) {
+                Log.d("TAG","onAnimationRepeat")
+                pika.setImageResource(R.drawable.pika2)
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                Log.d("TAG","onAnimationEnd")
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+                Log.d("TAG","onAnimationStart")
+            }
+
+        })
+
+        var set=AnimationSet(false)
+        set.addAnimation(MyYAnimation)
+        set.addAnimation(alphaAnimation)
+        pika.startAnimation(set)
     }
 
 }
